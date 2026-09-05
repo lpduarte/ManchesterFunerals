@@ -44,15 +44,15 @@
     --vignette-2: rgba(18, 21, 18, .68);   /* edges of the darkening      */
 
     /* --- Type scale ---------------------------------------------------
-       Base de 12px no rótulo e no crédito, e daí para cima em passos de
-       1.6. Tudo deriva de --type-base: a base escala com o ecrã e os
-       rácios ficam iguais em qualquer largura, por isso a hierarquia não
-       se inverte no telemóvel.
+       Base de 12px no crédito, e daí para cima em passos de 1.6. Tudo
+       deriva de --type-base: a base escala com o ecrã e os rácios ficam
+       iguais em qualquer largura, por isso a hierarquia não se inverte no
+       telemóvel.
 
-                        1728px    390px
-         Coming soon     30.72    27.65   base x 1.6 x 1.6
-         marcas          19.20    17.28   base x 1.6
-         rótulo, crédito 12.00    10.80   base                          */
+                     1728px    390px
+         Coming soon  30.72    27.65   base x 1.6 x 1.6
+         marcas       19.20    17.28   base x 1.6
+         crédito      12.00    10.80   base                             */
     --type-base: clamp(.675rem, .09vw + .653rem, .75rem);
     --type-up1:  calc(var(--type-base) * 1.6);
     --type-up2:  calc(var(--type-base) * 1.6 * 1.6);
@@ -123,15 +123,8 @@
 
   /* --- Sister brands ------------------------------------------------ */
   .also {
-    margin-top: clamp(.5rem, 3vh, 2rem);   /* respira mais que o gap da stage */
-  }
-
-  .also-label {
-    margin: 0 0 clamp(.6rem, 1.4vh, .9rem);
-    font-size: var(--type-base);
-    font-weight: 300;
-    letter-spacing: .12em;
-    color: rgba(255, 255, 255, .55);
+    /* sem o rótulo a fazer de intervalo, o afastamento passa a ser todo daqui */
+    margin-top: clamp(1.2rem, 4.5vh, 3rem);
   }
 
   .also-list {
@@ -247,7 +240,6 @@
   <p class="coming">Coming soon</p>
 
   <nav class="also" aria-label="Other services from the same group">
-    <p class="also-label">Also from us</p>
     <ul class="also-list">
       <li><a href="https://directcremation.co.uk/">Direct Cremation</a></li>
       <li><a href="https://londonfunerals.co.uk/">London Funerals</a></li>

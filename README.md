@@ -50,14 +50,13 @@ WebP em `og:image`.
 ### Escala tipográfica
 
 Um passo de **1.6** entre níveis, tudo derivado de `--type-base` no `:root`.
-Três níveis é o que 1.6 permite antes de o quarto cair abaixo do legível, por
-isso o rótulo e o crédito partilham o nível de baixo.
+Três níveis é o que 1.6 permite antes de o quarto cair abaixo do legível.
 
 | | 1728px | 390px | |
 |---|---|---|---|
 | `--type-up2` | 30,72 | 27,65 | Coming soon |
 | `--type-up1` | 19,20 | 17,28 | marcas irmãs |
-| `--type-base` | 12,00 | 10,80 | rótulo, crédito |
+| `--type-base` | 12,00 | 10,80 | crédito |
 
 A base escala com o ecrã e os outros multiplicam-na, por isso **os rácios são
 1,600 em qualquer largura**. Antes cada nível tinha o seu `clamp()` e os passos
@@ -129,6 +128,10 @@ de metade do detalhe visível.
 Três links para as outras agências do cliente: Direct Cremation, London
 Funerals e Harbour Water Cremation. Abrem **na mesma janela** — quem clica
 quer sair, ao contrário do crédito da foto, que é nota lateral e abre à parte.
+
+Houve um rótulo "Also from us" por cima; o cliente pediu para sair
+(2026-09-05). Sem ele nada na página diz porque estes três links ali estão —
+o `aria-label` do `<nav>` é o que resta, e só chega a leitores de ecrã.
 
 O separador `·` vive no `::before` do item da direita, para viajar com ele
 quando a linha parte, e um `data-line-start` posto por JS tira-o a quem abre
