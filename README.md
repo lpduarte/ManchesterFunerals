@@ -6,9 +6,8 @@ dependências: HTML e CSS num ficheiro, assets estáticos ao lado.
 ```
 index.html              markup + CSS (inline, é uma página só)
 favicon.svg             símbolo branco sobre círculo #424642
-assets/img/moor-*.webp  fundo actual (foto), 3 larguras + variante portrait
-assets/video/bg.mp4     fundo em vídeo — fora de uso, ver "Fundo"
-assets/img/             logo, símbolo, poster do vídeo, ícones
+assets/img/moor-*.webp  fundo, 3 larguras + variante portrait
+assets/img/             logo, símbolo, ícones
 ```
 
 ## Marca
@@ -34,14 +33,15 @@ texto invisível. Muda-se nas definições do kit, não aqui no código.
 
 ## Fundo
 
-O fundo é **temporário**. O vídeo original mostrava um vale que não é o
-noroeste de Inglaterra — campos em faixas, casas dispersas, encostas
-florestadas até ao cume: Europa Central, provavelmente os Beskids. Nada disso
-se lê debaixo do véu, mas o ficheiro está errado para a marca.
+Uma fotografia de Saddleworth Moor, com o Dovestone Reservoir ao centro.
 
-Está no lugar dele uma fotografia de Saddleworth Moor, com o Dovestone
-Reservoir ao centro, enquanto se gera um vídeo da região. O `bg.mp4` e o
-`poster.webp` ficam no repo à espera dessa substituição.
+Até 2026-09-05 o fundo foi um vídeo, removido porque mostrava um vale que não
+é o noroeste de Inglaterra — campos em faixas, casas dispersas, encostas
+florestadas até ao cume: Europa Central, provavelmente os Beskids. Nada disso
+se lia debaixo do véu, mas o ficheiro estava errado para a marca. Chegou a
+haver a intenção de o substituir por um vídeo da região; foi abandonada. Se
+alguma vez se retomar, o `bg.mp4` e o pipeline que o fazia estão no commit
+`593d341`.
 
 ### A fotografia
 
@@ -105,44 +105,11 @@ ffmpeg -i base-P.png -vf "scale=1536:2048:flags=lanczos" P.png
 cwebp -q 72 -m 6 -sharp_yuv P.png -o assets/img/moor-portrait-1536.webp
 ```
 
-A qualidade 72 foi escolhida como o CRF do vídeo: comparando **com o véu
+A qualidade 72 foi escolhida comparando **com o véu
 aplicado**, que é como a página se vê. Aí q72 dá 44,9 dB de PSNR — acima dos
 40 dB a que a diferença deixa de ser visível — e subir para q78 custa +172 KB
 por 1 dB. O peso por visitante é um ficheiro só: 380 KB a 912 KB conforme o
 ecrã, ou 491 KB no telefone.
-
-### Fundo em vídeo
-
-53,8 MB (3840×2160, 34 Mbps) → 1,1 MB (1920×1080, 24 fps, 0,8 Mbps).
-
-O corte original saltava no loop — ao fim de 12,5s as nuvens já se tinham
-deslocado. O `xfade` funde o fim com o princípio: o corpo é `V[1.2:12.5]` e os
-seus últimos 1,2s desvanecem para `V[0:1.2]`, portanto o vídeo começa e acaba
-no mesmo ponto do material.
-
-```sh
-ffmpeg -i video-background.mp4 -filter_complex "
-[0:v]eq=saturation=0.60,hqdn3d=2:1.5:4:4,fps=24,scale=-2:1080:flags=lanczos,format=yuv420p,split=2[x][y];
-[x]trim=1.2:12.5,setpts=PTS-STARTPTS[rest];
-[y]trim=0:1.2,setpts=PTS-STARTPTS[head];
-[rest][head]xfade=transition=fade:duration=1.2:offset=10.1[out]" -map "[out]" \
-  -c:v libx264 -profile:v high -level 4.0 -preset veryslow -crf 36 \
-  -pix_fmt yuv420p -g 48 -movflags +faststart -an assets/video/bg.mp4
-```
-
-O `hqdn3d` é o que faz a poupança: sem ele, o mesmo CRF dá 7,5 MB. A erva ao
-vento é conteúdo de entropia alta, e o denoise não se nota debaixo do véu.
-
-O CRF 36 foi escolhido comparando crops 1:1 contra uma referência CRF 16 de
-26 MB, **com o overlay aplicado** — é assim que a página se vê, e a esse nível
-de escurecimento as duas são indistinguíveis.
-
-O poster é o primeiro frame do resultado, para não haver salto ao arrancar:
-
-```sh
-ffmpeg -i assets/video/bg.mp4 -frames:v 1 poster.png
-cwebp -q 76 -m 6 poster.png -o assets/img/poster.webp
-```
 
 ### Logo e ícones
 
@@ -161,8 +128,9 @@ menos raios e mais grossos — decisão de marca, não de código.
 
 ## Verificado em
 
-Chrome via Playwright, 1728×1080 e 390×844 (iPhone 13).
+Chrome via Playwright, 1728×1080 e 390×844 (iPhone 13) — as duas pontas que
+interessam, porque são as duas variantes que o `srcset` serve.
 
-Nota: `python3 -m http.server` não responde a *range requests*, por isso o
-`<video>` não faz seek. Reproduz e faz loop na mesma; qualquer servidor a sério
-não tem o problema.
+O `lpduarte.github.io` está autorizado no kit do Adobe Fonts e o IP da rede
+local não está: para testar tipografia no telemóvel, usa o endereço publicado,
+não o `python3 -m http.server`. Pelo IP a Museo falha em silêncio.
