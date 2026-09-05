@@ -12,7 +12,7 @@ index.html              markup + CSS (inline, é uma página só)
 LICENSE                 três licenças, uma por tipo de ficheiro
 favicon.svg             símbolo branco sobre círculo #424642
 assets/img/moor-*.webp  fundo, 3 larguras + variante portrait
-assets/img/og.jpg       imagem de partilha, 1200x630
+assets/img/og.png       imagem de partilha, 1200x630
 assets/img/             logo, símbolo, ícones
 ```
 
@@ -31,13 +31,18 @@ coisa em silêncio:
 
 ### A imagem de partilha
 
-`assets/img/og.jpg` é um screenshot da própria página a 1200×630, com o
-crédito escondido — não é uma composição à parte, por isso não pode divergir
-do que o site mostra. Refaz-se abrindo a página nessa medida e escondendo o
-`.credit`.
+`assets/img/og.png` é o símbolo branco centrado sobre `#424642`, 1200×630. É
+o que aparece quando se partilha o link — em WhatsApp, Slack, iMessage,
+LinkedIn, Facebook — e não serve mais nada.
 
-É **JPEG de propósito**: vários scrapers, o do WhatsApp incluído, não lêem
-WebP em `og:image`.
+Foi um screenshot da página até 2026-09-05. O símbolo sozinho aguenta melhor
+o corte: cada serviço recorta a seu modo (o Twitter para 2:1, outros para
+quadrado) e uma forma centrada sobrevive a qualquer um, ao passo que um
+screenshot com texto pequeno perde metade.
+
+**PNG, não JPEG**: em cor sólida o JPEG desvia 2 níveis do `#424642` e pesa
+16 KB; o PNG de paleta acerta a cor ao nível e pesa 3. Nenhum scraper tem
+problema com PNG — o que não se pode usar é WebP, que o do WhatsApp não lê.
 
 ## Marca
 
@@ -109,8 +114,9 @@ O `LICENSE` divide o repo em três: a foto e as suas variantes vão sob CC
 BY-SA, como o ShareAlike obriga; o logo e os ícones ficam com todos os
 direitos reservados; o código idem. **O repo ser público não é uma oferta da
 marca do cliente** — e uma licença única e permissiva seria exactamente isso.
-A `og.jpg` é o caso feio: junta o logo à foto licenciada, portanto não se
-oferece sob licença nenhuma.
+(A `og.jpg` foi durante um dia o caso feio, por juntar o logo à foto
+licenciada. Deixou de existir: a imagem de partilha é agora só o símbolo,
+que cai inteiro na secção da marca.)
 
 O crédito está a `rgba(255,255,255,.38)`, o que dá **3,25:1** de contraste
 sobre a erva clara e **falha o mínimo AA de 4,5:1**. É deliberado: passaria a

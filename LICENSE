@@ -29,6 +29,7 @@ and licensing anything you make from them the same way.
 2. THE BRAND — all rights reserved
 ----------------------------------
 
+    assets/img/og.png
     assets/img/logo-white.svg
     assets/img/symbol-white.svg
     assets/img/apple-touch-icon.png
@@ -55,13 +56,8 @@ serving the site; no licence to reuse is granted. If you want to use part of
 it, ask.
 
 
-A note on assets/img/og.jpg
----------------------------
-
-The share image is a rendering of the page itself: it puts the brand logo
-(section 2) on top of the CC BY-SA photograph (section 1). Those terms pull in
-opposite directions, so the file is offered for reuse under neither. If you
-want the photograph, take it from section 1 — those files carry no brand.
+A note on the split
+-------------------
 
 This split exists because the background is a licensed photograph. If it is
 ever replaced by an image with no attribution requirement, section 1 goes away
