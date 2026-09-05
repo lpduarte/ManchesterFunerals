@@ -48,10 +48,16 @@ Reservoir ao centro, enquanto se gera um vídeo da região. O `bg.mp4` e o
 De Roger Cornfoot, 2017, SE0206 — a 3 km de Diggle, Oldham.
 [Geograph 5485216](https://www.geograph.org.uk/photo/5485216), **CC BY-SA 2.0**.
 
-A licença obriga a crédito visível na página (autor, título, ligação à obra,
-ligação à licença) e a indicar as alterações. É o que faz o `.credit` no
-rodapé. O ShareAlike faz a versão recortada herdar a mesma licença — a página
-declara-o. **Se o fundo mudar, o `.credit` sai com ele.**
+A secção 4(c) obriga a crédito visível com quatro coisas e mais nada: nome do
+autor, título da obra, ligação à obra e uma nota que identifique o uso na
+derivada ("cropped and desaturated"). Mais a ligação à licença, por 4(a). É o
+que faz o `.credit` no rodapé.
+
+O ShareAlike **não** se declara na página — é uma obrigação sobre como se
+licencia a derivada, não sobre o que se escreve ao leitor. Não pôr lá texto
+sobre isso não é incumprimento.
+
+**Se o fundo mudar, o `.credit` sai com ele.**
 
 O original tem 1024×768. Foi ampliado 4× no Photoshop (Camera Raw → Enhance →
 Super Resolution), o que reconstruiu detalhe a sério: a energia espectral acima
