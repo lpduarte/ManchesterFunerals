@@ -1,14 +1,42 @@
 # Manchester Funerals — holding page
 
-Página única servida em <https://manchesterfunerals.co.uk>. Sem build, sem
-dependências: HTML e CSS num ficheiro, assets estáticos ao lado.
+Página única, em <https://lpduarte.github.io/ManchesterFunerals/> enquanto
+espera aprovação do cliente. Sem build, sem dependências: HTML e CSS num
+ficheiro, assets estáticos ao lado.
+
+O destino é `manchesterfunerals.co.uk`, mas **esse domínio está ocupado** por
+uma página "Coming Soon" do Squarespace. Esta há-de substituí-la.
 
 ```
 index.html              markup + CSS (inline, é uma página só)
 favicon.svg             símbolo branco sobre círculo #424642
 assets/img/moor-*.webp  fundo, 3 larguras + variante portrait
+assets/img/og.jpg       imagem de partilha, 1200x630
 assets/img/             logo, símbolo, ícones
 ```
+
+## Quando o domínio migrar
+
+Três coisas mudam ao mesmo tempo, e esquecer qualquer uma delas parte alguma
+coisa em silêncio:
+
+1. **`CNAME`** no repo com `manchesterfunerals.co.uk`, e o DNS a apontar para
+   o GitHub Pages — o que implica tirar do ar a página do Squarespace.
+2. **`og:url` e `og:image`** no `index.html`, que hoje apontam para o
+   `lpduarte.github.io`. Se ficarem, o preview de quem partilha o link vai
+   buscar a imagem ao endereço antigo.
+3. **O domínio no kit do Adobe Fonts** (ver "Marca"). Sem isso a Museo não
+   carrega, e falha sem dar erro.
+
+### A imagem de partilha
+
+`assets/img/og.jpg` é um screenshot da própria página a 1200×630, com o
+crédito escondido — não é uma composição à parte, por isso não pode divergir
+do que o site mostra. Refaz-se abrindo a página nessa medida e escondendo o
+`.credit`.
+
+É **JPEG de propósito**: vários scrapers, o do WhatsApp incluído, não lêem
+WebP em `og:image`.
 
 ## Marca
 
