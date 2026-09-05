@@ -9,6 +9,7 @@ uma página "Coming Soon" do Squarespace. Esta há-de substituí-la.
 
 ```
 index.html              markup + CSS (inline, é uma página só)
+LICENSE                 três licenças, uma por tipo de ficheiro
 favicon.svg             símbolo branco sobre círculo #424642
 assets/img/moor-*.webp  fundo, 3 larguras + variante portrait
 assets/img/og.jpg       imagem de partilha, 1200x630
@@ -104,6 +105,13 @@ licencia a derivada, não sobre o que se escreve ao leitor. Não pôr lá texto
 sobre isso não é incumprimento.
 
 **Se o fundo mudar, o `.credit` sai com ele.**
+
+O `LICENSE` divide o repo em três: a foto e as suas variantes vão sob CC
+BY-SA, como o ShareAlike obriga; o logo e os ícones ficam com todos os
+direitos reservados; o código idem. **O repo ser público não é uma oferta da
+marca do cliente** — e uma licença única e permissiva seria exactamente isso.
+A `og.jpg` é o caso feio: junta o logo à foto licenciada, portanto não se
+oferece sob licença nenhuma.
 
 O crédito está a `rgba(255,255,255,.38)`, o que dá **3,25:1** de contraste
 sobre a erva clara e **falha o mínimo AA de 4,5:1**. É deliberado: passaria a
