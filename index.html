@@ -21,7 +21,12 @@
 <link rel="preconnect" href="https://p.typekit.net" crossorigin>
 <link rel="stylesheet" href="https://use.typekit.net/glf6otm.css">
 
-<link rel="preload" as="image" href="assets/img/poster.webp" fetchpriority="high">
+<link rel="preload" as="image" fetchpriority="high"
+      href="assets/img/moor-3200.webp"
+      imagesrcset="assets/img/moor-2560.webp 2560w,
+                   assets/img/moor-3200.webp 3200w,
+                   assets/img/moor-4096.webp 4096w"
+      imagesizes="100vw">
 
 <style>
   /* --- Brand ------------------------------------------------------- */
@@ -45,7 +50,7 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* --- Background video --------------------------------------------- */
+  /* --- Background image --------------------------------------------- */
   .bg {
     position: fixed;
     inset: 0;
@@ -77,6 +82,7 @@
     justify-content: center;
     gap: clamp(2rem, 5vh, 3.5rem);
     padding: clamp(1.5rem, 6vw, 4rem);
+    padding-bottom: clamp(4rem, 12vh, 6rem);
     text-align: center;
   }
 
@@ -95,6 +101,33 @@
     color: rgba(255, 255, 255, .92);
   }
 
+  /* --- Photo credit (CC BY-SA 2.0 requires it on the page) ---------- */
+  .credit {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    padding: 0 clamp(1rem, 4vw, 2rem)
+             calc(clamp(.7rem, 2vh, 1.1rem) + env(safe-area-inset-bottom, 0px));
+    font-size: clamp(.58rem, 1.1vw, .7rem);
+    font-weight: 300;
+    letter-spacing: .06em;
+    line-height: 1.5;
+    text-align: center;
+    text-wrap: balance;
+    color: rgba(255, 255, 255, .38);
+  }
+
+  .credit a {
+    color: inherit;
+    text-decoration-color: rgba(255, 255, 255, .22);
+    text-underline-offset: .25em;
+  }
+
+  .credit a:hover,
+  .credit a:focus-visible { color: rgba(255, 255, 255, .72); }
+
   @media (prefers-reduced-motion: no-preference) {
     .logo, .coming { animation: rise .9s cubic-bezier(.22, 1, .36, 1) both; }
     .coming { animation-delay: .18s; }
@@ -107,22 +140,16 @@
 </head>
 <body>
 
-<video class="bg" poster="assets/img/poster.webp"
-       autoplay muted loop playsinline preload="auto"
-       aria-hidden="true" tabindex="-1">
-  <source src="assets/video/bg.mp4" type="video/mp4">
-</video>
-
-<script>
-  /* Anyone who asked the system for less motion gets the poster frame, not the loop. */
-  (function () {
-    var v = document.querySelector('.bg');
-    if (v && matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      v.removeAttribute('autoplay');
-      v.pause();
-    }
-  })();
-</script>
+<picture>
+  <source media="(orientation: portrait)"
+          srcset="assets/img/moor-portrait-1536.webp">
+  <img class="bg" alt="" aria-hidden="true" fetchpriority="high" decoding="async"
+       src="assets/img/moor-3200.webp"
+       srcset="assets/img/moor-2560.webp 2560w,
+               assets/img/moor-3200.webp 3200w,
+               assets/img/moor-4096.webp 4096w"
+       sizes="100vw">
+</picture>
 
 <div class="veil"></div>
 
@@ -130,6 +157,13 @@
   <img class="logo" src="assets/img/logo-white.svg" alt="Manchester Funerals">
   <p class="coming">Coming soon</p>
 </main>
+
+<p class="credit">
+  Background: <a href="https://www.geograph.org.uk/photo/5485216">Saddleworth Moor</a>
+  &copy; <a href="https://www.geograph.org.uk/profile/32256">Roger Cornfoot</a>,
+  licensed under <a href="https://creativecommons.org/licenses/by-sa/2.0/" rel="license">CC BY-SA 2.0</a>.
+  Cropped and desaturated; this adaptation is shared under the same licence.
+</p>
 
 </body>
 </html>

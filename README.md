@@ -6,7 +6,8 @@ dependências: HTML e CSS num ficheiro, assets estáticos ao lado.
 ```
 index.html              markup + CSS (inline, é uma página só)
 favicon.svg             símbolo branco sobre círculo #424642
-assets/video/bg.mp4     fundo em loop
+assets/img/moor-*.webp  fundo actual (foto), 3 larguras + variante portrait
+assets/video/bg.mp4     fundo em vídeo — fora de uso, ver "Fundo"
 assets/img/             logo, símbolo, poster do vídeo, ícones
 ```
 
@@ -31,6 +32,33 @@ página cai no arredondado do sistema:
 O kit vem com `font-display: auto`, o que no Chrome significa um instante de
 texto invisível. Muda-se nas definições do kit, não aqui no código.
 
+## Fundo
+
+O fundo é **temporário**. O vídeo original mostrava um vale que não é o
+noroeste de Inglaterra — campos em faixas, casas dispersas, encostas
+florestadas até ao cume: Europa Central, provavelmente os Beskids. Nada disso
+se lê debaixo do véu, mas o ficheiro está errado para a marca.
+
+Está no lugar dele uma fotografia de Saddleworth Moor, com o Dovestone
+Reservoir ao centro, enquanto se gera um vídeo da região. O `bg.mp4` e o
+`poster.webp` ficam no repo à espera dessa substituição.
+
+### A fotografia
+
+De Roger Cornfoot, 2017, SE0206 — a 3 km de Diggle, Oldham.
+[Geograph 5485216](https://www.geograph.org.uk/photo/5485216), **CC BY-SA 2.0**.
+
+A licença obriga a crédito visível na página (autor, título, ligação à obra,
+ligação à licença) e a indicar as alterações. É o que faz o `.credit` no
+rodapé. O ShareAlike faz a versão recortada herdar a mesma licença — a página
+declara-o. **Se o fundo mudar, o `.credit` sai com ele.**
+
+O original tem 1024×768. Foi ampliado 4× no Photoshop (Camera Raw → Enhance →
+Super Resolution), o que reconstruiu detalhe a sério: a energia espectral acima
+de meio Nyquist passa de 0,01% (lanczos) para 14,1%. Por isso se servem 4096px
+ao ecrã grande em vez de parar nos 2560 — cada degrau abaixo de 4096 corta mais
+de metade do detalhe visível.
+
 ## Tratamento visual
 
 O fundo leva sempre duas camadas, definidas em `:root` no `index.html`:
@@ -45,6 +73,37 @@ comprime melhor.
 ## Regenerar os assets
 
 Partem dos originais, que não estão no repo.
+
+### Fundo em fotografia
+
+Do PNG de 4096×3072 saído do Photoshop. O corte 16:9 é feito **pelo topo**
+(`y=0`): é o que deixa mais céu, e põe o horizonte a 38,7% da altura — o mais
+perto que esta foto chega dos 45% do vídeo. O corte portrait é 3:4 centrado,
+para o telefone não perder metade da imagem no `object-fit: cover`.
+
+Tal como no vídeo, a desaturação de 60% vai **gravada no ficheiro**: menos
+crominância comprime melhor, e mantém os dois fundos com o mesmo tratamento.
+
+```sh
+ffmpeg -i "Saddleworth Moor-upscale.png" \
+  -vf "crop=4096:2304:0:0,eq=saturation=0.60,format=rgb24" base-L.png
+ffmpeg -i "Saddleworth Moor-upscale.png" \
+  -vf "crop=2304:3072:896:0,eq=saturation=0.60,format=rgb24" base-P.png
+
+for w in 2560 3200 4096; do
+  ffmpeg -i base-L.png -vf "scale=${w}:-2:flags=lanczos" L-${w}.png
+  cwebp -q 72 -m 6 -sharp_yuv L-${w}.png -o assets/img/moor-${w}.webp
+done
+
+ffmpeg -i base-P.png -vf "scale=1536:2048:flags=lanczos" P.png
+cwebp -q 72 -m 6 -sharp_yuv P.png -o assets/img/moor-portrait-1536.webp
+```
+
+A qualidade 72 foi escolhida como o CRF do vídeo: comparando **com o véu
+aplicado**, que é como a página se vê. Aí q72 dá 44,9 dB de PSNR — acima dos
+40 dB a que a diferença deixa de ser visível — e subir para q78 custa +172 KB
+por 1 dB. O peso por visitante é um ficheiro só: 380 KB a 912 KB conforme o
+ecrã, ou 491 KB no telefone.
 
 ### Fundo em vídeo
 
