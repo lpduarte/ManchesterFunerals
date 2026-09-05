@@ -46,6 +46,24 @@ WebP em `og:image`.
 | Tipografia | Museo Sans Rounded (Adobe Fonts, kit `glf6otm`) |
 | Logo | fornecido em SVG a `#424642`, convertido para `#FFFFFF` |
 
+### Escala tipográfica
+
+Um passo de **1.6** entre níveis, tudo derivado de `--type-base` no `:root`.
+Três níveis é o que 1.6 permite antes de o quarto cair abaixo do legível, por
+isso o rótulo e o crédito partilham o nível de baixo.
+
+| | 1728px | 390px | |
+|---|---|---|---|
+| `--type-up2` | 30,72 | 27,65 | Coming soon |
+| `--type-up1` | 19,20 | 17,28 | marcas irmãs |
+| `--type-base` | 12,00 | 10,80 | rótulo, crédito |
+
+A base escala com o ecrã e os outros multiplicam-na, por isso **os rácios são
+1,600 em qualquer largura**. Antes cada nível tinha o seu `clamp()` e os passos
+divergiam: 1,28 / 1,26 / 1,11 no desktop contra 1,10 / 1,21 / 1,17 no
+telemóvel — ao ponto de o "Coming soon" e as marcas quase se igualarem a 390px.
+Mexer num tamanho isolado traz esse problema de volta.
+
 ### Adobe Fonts — domínios
 
 O kit só serve as fonts nos domínios registados nas suas definições. **Cada
@@ -87,11 +105,36 @@ sobre isso não é incumprimento.
 
 **Se o fundo mudar, o `.credit` sai com ele.**
 
+O crédito está a `rgba(255,255,255,.38)`, o que dá **3,25:1** de contraste
+sobre a erva clara e **falha o mínimo AA de 4,5:1**. É deliberado: passaria a
+0,55, mas isso torna-o presente de mais para o que é. Decisão tomada com o
+número à frente — não é lapso, não "corrijas" sem falar.
+
 O original tem 1024×768. Foi ampliado 4× no Photoshop (Camera Raw → Enhance →
 Super Resolution), o que reconstruiu detalhe a sério: a energia espectral acima
 de meio Nyquist passa de 0,01% (lanczos) para 14,1%. Por isso se servem 4096px
 ao ecrã grande em vez de parar nos 2560 — cada degrau abaixo de 4096 corta mais
 de metade do detalhe visível.
+
+## Marcas irmãs
+
+Três links para as outras agências do cliente: Direct Cremation, London
+Funerals e Harbour Water Cremation. Abrem **na mesma janela** — quem clica
+quer sair, ao contrário do crédito da foto, que é nota lateral e abre à parte.
+
+O separador `·` vive no `::before` do item da direita, para viajar com ele
+quando a linha parte, e um `data-line-start` posto por JS tira-o a quem abre
+uma linha. Sem isso ficava um `·` órfão no fim da linha acima, e **não há
+selector CSS que lá chegue** — a posição do wrap só se sabe depois do layout.
+
+O separador é `position: absolute` de propósito. Quando estava no fluxo,
+tirá-lo encolhia o item, que subia para a linha de cima, e a medição que
+mandara tirá-lo deixava de ser verdade — a 320px apareciam duas marcas na
+mesma linha sem nada entre elas. Fora do fluxo, mostrá-lo ou escondê-lo não
+mexe na largura de nada.
+
+Sem JavaScript aparecem os três separadores, órfãos incluídos: degrada, não
+parte.
 
 ## Tratamento visual
 

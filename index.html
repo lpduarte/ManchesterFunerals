@@ -42,6 +42,20 @@
     --veil:       rgba(66, 70, 66, .68);   /* brand tint over the photo   */
     --vignette-1: rgba(18, 21, 18, .30);   /* centre of the darkening     */
     --vignette-2: rgba(18, 21, 18, .68);   /* edges of the darkening      */
+
+    /* --- Type scale ---------------------------------------------------
+       Base de 12px no rótulo e no crédito, e daí para cima em passos de
+       1.6. Tudo deriva de --type-base: a base escala com o ecrã e os
+       rácios ficam iguais em qualquer largura, por isso a hierarquia não
+       se inverte no telemóvel.
+
+                        1728px    390px
+         Coming soon     30.72    27.65   base x 1.6 x 1.6
+         marcas          19.20    17.28   base x 1.6
+         rótulo, crédito 12.00    10.80   base                          */
+    --type-base: clamp(.675rem, .09vw + .653rem, .75rem);
+    --type-up1:  calc(var(--type-base) * 1.6);
+    --type-up2:  calc(var(--type-base) * 1.6 * 1.6);
   }
 
   /* --- Reset ------------------------------------------------------- */
@@ -100,11 +114,79 @@
 
   .coming {
     margin: 0;
-    font-size: clamp(.9rem, 1.9vw, 1.25rem);
+    font-size: var(--type-up2);
     font-weight: 300;
     letter-spacing: .34em;
     text-transform: uppercase;
     color: rgba(255, 255, 255, .92);
+  }
+
+  /* --- Sister brands ------------------------------------------------ */
+  .also {
+    margin-top: clamp(.5rem, 3vh, 2rem);   /* respira mais que o gap da stage */
+  }
+
+  .also-label {
+    margin: 0 0 clamp(.6rem, 1.4vh, .9rem);
+    font-size: var(--type-base);
+    font-weight: 300;
+    letter-spacing: .12em;
+    color: rgba(255, 255, 255, .55);
+  }
+
+  .also-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: baseline;
+    gap: .55em 1.6em;   /* o 1.6 da escala também separa as marcas       */
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--type-up1);
+    font-weight: 300;
+    letter-spacing: .02em;
+  }
+
+  /* Separador entre marcas. Vive no item da direita para viajar com ele
+     quando a linha parte, e o data-line-start (posto por JS) tira-o a quem
+     abre uma linha — senão ficava um "·" órfão no fim da linha acima.
+
+     É absolute de propósito: desenhado a meio do gap, não ocupa espaço no
+     fluxo. Se ocupasse, tirá-lo encolhia o item, que subia para a linha de
+     cima, e a medição que mandou tirá-lo deixava de ser verdade.          */
+  .also-list li { position: relative; }
+
+  .also-list li + li::before {
+    content: "·";
+    position: absolute;
+    left: -.8em;
+    transform: translateX(-50%);
+    color: rgba(255, 255, 255, .3);
+  }
+
+  .also-list li[data-line-start]::before { content: none; }
+
+  .also-list a {
+    position: relative;
+    color: rgba(255, 255, 255, .82);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 255, 255, .22);
+    padding-bottom: .12em;
+    transition: color .18s ease, border-color .18s ease;
+  }
+
+  /* alvo de toque até aos 24px da WCAG 2.2, sem mexer no que se vê */
+  .also-list a::before {
+    content: "";
+    position: absolute;
+    inset: -7px -5px;
+  }
+
+  .also-list a:hover,
+  .also-list a:focus-visible {
+    color: #fff;
+    border-bottom-color: rgba(255, 255, 255, .7);
   }
 
   /* --- Photo credit (CC BY-SA 2.0 requires it on the page) ---------- */
@@ -116,7 +198,7 @@
     z-index: 2;
     padding: 0 clamp(1rem, 4vw, 2rem)
              calc(clamp(.7rem, 2vh, 1.1rem) + env(safe-area-inset-bottom, 0px));
-    font-size: clamp(.58rem, 1.1vw, .7rem);
+    font-size: var(--type-base);
     font-weight: 300;
     letter-spacing: .06em;
     line-height: 1.5;
@@ -135,8 +217,9 @@
   .credit a:focus-visible { color: rgba(255, 255, 255, .72); }
 
   @media (prefers-reduced-motion: no-preference) {
-    .logo, .coming { animation: rise .9s cubic-bezier(.22, 1, .36, 1) both; }
+    .logo, .coming, .also { animation: rise .9s cubic-bezier(.22, 1, .36, 1) both; }
     .coming { animation-delay: .18s; }
+    .also   { animation-delay: .34s; }
     @keyframes rise {
       from { opacity: 0; transform: translateY(12px); }
       to   { opacity: 1; transform: none; }
@@ -162,7 +245,47 @@
 <main class="stage">
   <img class="logo" src="assets/img/logo-white.svg" alt="Manchester Funerals">
   <p class="coming">Coming soon</p>
+
+  <nav class="also" aria-label="Other services from the same group">
+    <p class="also-label">Also from us</p>
+    <ul class="also-list">
+      <li><a href="https://directcremation.co.uk/">Direct Cremation</a></li>
+      <li><a href="https://londonfunerals.co.uk/">London Funerals</a></li>
+      <li><a href="https://harbour.uk/">Harbour Water Cremation</a></li>
+    </ul>
+  </nav>
 </main>
+
+<script>
+  /* Marca o primeiro item de cada linha, para o CSS lhe tirar o separador.
+     A posição do wrap só se sabe depois do layout, e nenhum selector CSS
+     a alcança — por isso mede-se aqui. Todas as leituras acontecem antes
+     de qualquer escrita, senão o próprio ajuste falseava as seguintes.   */
+  (function () {
+    var lista = document.querySelector('.also-list');
+    if (!lista) return;
+    var itens = Array.prototype.slice.call(lista.children);
+
+    function marcar() {
+      itens.forEach(function (li) { li.removeAttribute('data-line-start'); });
+      var topos = itens.map(function (li) {
+        return Math.round(li.getBoundingClientRect().top);
+      });
+      var linha = null;
+      topos.forEach(function (topo, i) {
+        if (linha === null || topo > linha) {
+          linha = topo;
+          itens[i].setAttribute('data-line-start', '');
+        }
+      });
+    }
+
+    marcar();
+    addEventListener('resize', marcar);
+    if (document.fonts) document.fonts.ready.then(marcar);
+  })();
+</script>
+
 
 <p class="credit">
   <a href="https://www.geograph.org.uk/photo/5485216"
